@@ -1,101 +1,45 @@
-<!-- templates/chat/your_template.html -->
+{% extends "base.html" %}
 
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Simple Chat</title>
-    {% load static %}
-    <link rel="stylesheet" href="{% static 'chat/css/material.min.css' %}" />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/icon?family=Material+Icons"
-    />
-    <style>
-      .page-content {
-        padding: 100px 100px;
-      }
-    </style>
-  </head>
+  <head> </head>
   <body>
     <!-- Always shows a header, even in smaller screens. -->
-    <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
-      <header class="mdl-layout__header">
-        <div class="mdl-layout__header-row">
-          <!-- Title -->
-          <span class="mdl-layout-title"
-            >
-            {% if request.user.is_authenticated %} 
-            Welcome, {{ request.user.first_name }}!
-            {% else %}
-            Welcome, Please login
-            {% endif %}
-            
-            
-            
-            </span
-          >
-          <!-- Add spacer, to align navigation to the right -->
-          <div class="mdl-layout-spacer"></div>
-          <!-- Navigation. We hide it in small screens. -->
-          <nav class="mdl-navigation mdl-layout--large-screen-only">
-            <a class="mdl-navigation__link" href="">Link</a>
-            <a class="mdl-navigation__link" href="">Link</a>
-            <a class="mdl-navigation__link" href="">Link</a>
-            <a class="mdl-navigation__link" href="">Link</a>
-          </nav>
-        </div>
-      </header>
-      <div class="mdl-layout__drawer">
-        <span class="mdl-layout-title">Chatroom</span>
-        <nav class="mdl-navigation">
-          <a class="mdl-navigation__link" href="">Link</a>
-          <a class="mdl-navigation__link" href="">Link</a>
-          <a class="mdl-navigation__link" href="">Link</a>
-          <a class="mdl-navigation__link" href="">Link</a>
-        </nav>
-      </div>
-      <main class="mdl-layout__content">
-        <div class="page-content">
 
-          {% if request.user.is_authenticated %} 
-          {% for message in messages %}
-          <div>
-            [{{ message.createdAt }}] <b>{{ message.author.first_name }}</b> : {{ message.text }}
-          </div>
-          {% endfor %}
+    {% block content %}
 
 
-          <form action="/chat/" method="post">
-            {% csrf_token %}
-            <div
-              class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label"
-            >
-              <input class="mdl-textfield__input" name="textmessage" type="text" id="sample3" />
-              <label class="mdl-textfield__label" for="sample3">Text...</label>
-            </div>
-            <button
-              class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent"
-            >
-              Send
-            </button>
-          </form>
-
-
-          {% else %}
-
-          <h1>Please login</h1>
-          <a href="/login">Login</a>
-
-
-          {% endif %}
-
-
-        </div>
-      </main>
+    {% if request.user.is_authenticated %} {% for message in messages %}
+    <div>
+      [{{ message.createdAt }}] <b>{{ message.author.first_name }}</b> : {{ message.text }}
     </div>
+    {% endfor %}
 
-    <script src="{% static 'chat/js/material.min.js' %}"></script>
+    <form action="/chat/" method="post">
+      {% csrf_token %}
+      <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+        <input
+          class="mdl-textfield__input"
+          name="textmessage"
+          type="text"
+          id="sample3"
+        />
+        <label class="mdl-textfield__label" for="sample3">Text...</label>
+      </div>
+      <button
+        class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent"
+      >
+        Send
+      </button>
+    </form>
+
+    {% else %}
+
+    <h1>Please login</h1>
+    <a href="/login/">Login</a>
+
+    {% endif %}
+
+    {% endblock %}
   </body>
 </html>

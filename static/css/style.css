@@ -1,0 +1,9 @@
+.page-content {
+        padding: 100px 100px;
+      }
+
+
+.auth-form{
+    display: flex;
+    flex-direction: column;
+}

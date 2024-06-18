@@ -1,0 +1,66 @@
+{% extends 'base.html' %} {% block content %}
+
+<h1>Register</h1>
+
+<form method="POST" action="" class="auth-form">
+  {% csrf_token %}
+  <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+    <input
+      class="mdl-textfield__input"
+      type="text"
+      id="sample3"
+      name="E-Mail"
+    />
+    <label class="mdl-textfield__label" for="sample3">E-Mail</label>
+  </div>
+
+  <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+    <input
+      class="mdl-textfield__input"
+      type="text"
+      id="sample3"
+      name="first_name"
+    />
+    <label class="mdl-textfield__label" for="sample3">First Name</label>
+  </div>
+
+  <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+    <input
+      class="mdl-textfield__input"
+      type="text"
+      id="sample3"
+      name="last_name"
+    />
+    <label class="mdl-textfield__label" for="sample3">Last Name</label>
+  </div>
+
+  <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+    <input
+      class="mdl-textfield__input"
+      type="password"
+      id="sample3"
+      name="password"
+    />
+    <label class="mdl-textfield__label" for="sample3">Password</label>
+  </div>
+
+  <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+    <input
+      class="mdl-textfield__input"
+      type="password"
+      id="sample3"
+      name="password_confirm"
+    />
+    <label class="mdl-textfield__label" for="sample3">Confirm Password</label>
+  </div>
+
+  <div>
+    <button
+      class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent"
+    >
+      Register
+    </button>
+  </div>
+</form>
+
+{% endblock %}
