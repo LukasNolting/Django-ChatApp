@@ -1,19 +1,34 @@
-from django.http import HttpResponseRedirect
+import os
+from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, redirect
+from dotenv import load_dotenv
 from .models import Chat, Message
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.auth import logout
+from django.core import serializers
 
+load_dotenv()
 
+print('mein Passwort ist', os.environ.get('password'))
 
 @login_required(login_url='/login/')
 def index(request):
+    """This is a function to render the index page.
+
+    Args:
+        request (_type_): _description_
+
+    Returns:
+        _type_: _description_
+    """
     if request.method == 'POST':
         print(request.POST)
         myChat = Chat.objects.get(id=1)
-        Message.objects.create(text=request.POST['textmessage'], author=request.user, chat=myChat, reciever=request.user)
+        new_message = Message.objects.create(text=request.POST['textmessage'], author=request.user, chat=myChat, reciever=request.user)
+        serialized_obj = serializers.serialize('json', [new_message])
+        return JsonResponse(serialized_obj[1:-1], safe=False) 
     chatMessages = Message.objects.filter(chat__id=1)
     return render(request, 'chat/index.html', {'messages' : chatMessages})
 
@@ -28,11 +43,10 @@ def login_view(request):
     return render(request, 'auth/login.html')
 
 
-def redirect_submit(request):
+def redirect_register(request):
     if request.method == 'GET':
         return HttpResponseRedirect('/register/')
     return render(request, 'auth/register.html')
-
 
 
 def register_view(request):
@@ -53,8 +67,8 @@ def register_view(request):
             is_superuser=False
         )
         
-        return HttpResponseRedirect('/login/')
-    
+        return HttpResponseRedirect('/login/') 
+     
     return render(request, 'auth/register.html')
 
 

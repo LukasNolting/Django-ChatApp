@@ -119,6 +119,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = 'C:/Users/l.nolting/OneDrive - bents.com/Desktop/FullStack/Backend/mod_04/simple-chat/static_output'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
@@ -128,8 +129,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 import os
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
-STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [
     'static',

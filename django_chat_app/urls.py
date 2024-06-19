@@ -19,7 +19,10 @@ from django.contrib import admin
 from django.urls import path
 from django.contrib.auth import views as auth_views
 
-from chat.views import index, login_view, redirect_submit, register_view, logout_view
+from chat.views import index, login_view, redirect_register, register_view
+from django.conf.urls.static import static
+from django_chat_app import settings
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -27,5 +30,6 @@ urlpatterns = [
     path('login/', login_view),
     path('register/', register_view),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
-    path('register/', redirect_submit, name='register'),
+    path('register/', redirect_register, name='register'),
+    + static (settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 ]

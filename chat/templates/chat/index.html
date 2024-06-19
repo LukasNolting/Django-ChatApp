@@ -4,27 +4,63 @@
 <html lang="en">
   <head> </head>
   <body>
-    <!-- Always shows a header, even in smaller screens. -->
 
-    {% block content %}
+    {% block content %} {% if request.user.is_authenticated %} 
+    
+    <div id="messageContainer">
 
-
-    {% if request.user.is_authenticated %} {% for message in messages %}
+    {% for message in messages %}
     <div>
       [{{ message.createdAt }}] <b>{{ message.author.first_name }}</b> : {{ message.text }}
     </div>
     {% endfor %}
 
-    <form action="/chat/" method="post">
+    </div>
+
+    <script>
+      async function sendMessage() {
+        let fd = new FormData();
+        let token = "{{ csrf_token }}"
+        const today = new Date();
+        const options = { year: 'numeric', month: 'long', day: 'numeric' };
+        const formattedDate = today.toLocaleDateString('en-US', options);
+        fd.append("textmessage", messagefield.value);
+        fd.append("csrfmiddlewaretoken", token);
+        try {
+          messageContainer.innerHTML += `
+              <div style="color: grey" id="deleteMessage">
+                ${formattedDate} <b>{{ request.user.first_name }}</b> : ${messagefield.value}
+              </div>`;
+          let response = await fetch("/chat/", {
+            method: "POST",
+            body: fd,
+          });
+          let json = await response.json();
+          let data = await JSON.parse(json);
+          console.log(data);
+          document.getElementById("deleteMessage").remove();
+          messageContainer.innerHTML += `
+              <div style="color: black">
+                [${formattedDate}] <b>${data.fields.author}</b> : ${data.fields.text}
+              </div>`;
+          messagefield.value = "";
+          console.log("ok");
+        } catch (e) {
+          console.log(e);
+        }
+      }
+    </script>
+
+    <form onsubmit="sendMessage(); return false;" method="post">
       {% csrf_token %}
       <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
         <input
           class="mdl-textfield__input"
           name="textmessage"
           type="text"
-          id="sample3"
+          id="messagefield"
         />
-        <label class="mdl-textfield__label" for="sample3">Text...</label>
+        <label class="mdl-textfield__label" for="messagefield">Text...</label>
       </div>
       <button
         class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent"
@@ -38,8 +74,6 @@
     <h1>Please login</h1>
     <a href="/login/">Login</a>
 
-    {% endif %}
-
-    {% endblock %}
+    {% endif %} {% endblock %}
   </body>
 </html>
