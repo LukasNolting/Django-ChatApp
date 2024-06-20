@@ -28,19 +28,30 @@ def index(request):
         myChat = Chat.objects.get(id=1)
         new_message = Message.objects.create(text=request.POST['textmessage'], author=request.user, chat=myChat, reciever=request.user)
         serialized_obj = serializers.serialize('json', [new_message])
+        print(serialized_obj)
         return JsonResponse(serialized_obj[1:-1], safe=False) 
     chatMessages = Message.objects.filter(chat__id=1)
     return render(request, 'chat/index.html', {'messages' : chatMessages})
 
+
+from django.shortcuts import render, redirect
+from django.contrib.auth import authenticate, login
+from django.http import HttpResponseRedirect
+
 def login_view(request):
+    if request.user.is_authenticated:
+        return redirect('chat')  # Leite eingeloggte Benutzer direkt zur Chat-Seite weiter
+
     if request.method == 'POST':
         user = authenticate(username=request.POST.get('username'), password=request.POST.get('password'))
-        if user: 
+        if user:
             login(request, user)
             return HttpResponseRedirect(request.GET.get('next', '/chat/'))
-        else: 
-            return render(request, 'auth/login.html', {'wrong_password' : True})
+        else:
+            return render(request, 'auth/login.html', {'wrong_password': True})
+    
     return render(request, 'auth/login.html')
+
 
 
 def redirect_register(request):

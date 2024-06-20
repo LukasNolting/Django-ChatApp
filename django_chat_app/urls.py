@@ -20,9 +20,8 @@ from django.urls import path
 from django.contrib.auth import views as auth_views
 
 from chat.views import index, login_view, redirect_register, register_view
-from django.conf.urls.static import static
-from django_chat_app import settings
-from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+from django.contrib.auth.decorators import login_required
+from django.views.generic import TemplateView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -31,5 +30,6 @@ urlpatterns = [
     path('register/', register_view),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
     path('register/', redirect_register, name='register'),
-    + static (settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    path('login/', login_view, name='login'),
+    path('chat/', login_required(TemplateView.as_view(template_name='chat.html')), name='chat'),
 ]

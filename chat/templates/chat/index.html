@@ -18,7 +18,12 @@
     </div>
 
     <script>
+
       async function sendMessage() {
+        const user = {
+          first_name : "{{ request.user.first_name }}",
+          last_name : "{{ request.user.last_name }}", 
+        }
         let fd = new FormData();
         let token = "{{ csrf_token }}"
         const today = new Date();
@@ -29,19 +34,19 @@
         try {
           messageContainer.innerHTML += `
               <div style="color: grey" id="deleteMessage">
-                ${formattedDate} <b>{{ request.user.first_name }}</b> : ${messagefield.value}
+                [${formattedDate}] <b>{{ request.user.first_name }}</b> : ${messagefield.value}
               </div>`;
           let response = await fetch("/chat/", {
             method: "POST",
             body: fd,
           });
           let json = await response.json();
-          let data = await JSON.parse(json);
+          let data = JSON.parse(json);
           console.log(data);
           document.getElementById("deleteMessage").remove();
           messageContainer.innerHTML += `
               <div style="color: black">
-                [${formattedDate}] <b>${data.fields.author}</b> : ${data.fields.text}
+                [${formattedDate}] <b>${user.first_name}</b> : ${data.fields.text}
               </div>`;
           messagefield.value = "";
           console.log("ok");

@@ -1,13 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
+  {% load static %}
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Chatroom</title>
+    <link rel="icon" type="image/x-icon" href="{% static '/img/logo.svg' %}">
+    
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Simple Chat</title>
-    {% load static %}
+    
     <link rel="stylesheet" href="{% static 'css/material.min.css' %}" />
     <link
       rel="stylesheet"
@@ -18,10 +21,17 @@
   <body>
     <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
       <header class="mdl-layout__header">
-        <div class="mdl-layout__header-row">
+      
+        
+        <div class="mdl-layout__header-row" style="gap: 40px !important; padding: 0 30px 0 30px;">
+
+        <a href="{% url 'login' %}">
+          <img src="{% static 'img/logo.svg' %}" alt="logo" style="width: 40px; height: 40px; margin: 8px 12px" />
+        </a>
+
           <!-- Title -->
           <span class="mdl-layout-title">
-            {% if request.user.is_authenticated %} Welcome, {{ request.user.first_name }}! {% else %} Welcome, Please login {% endif %}
+            {% if request.user.is_authenticated %} Welcome, {{ request.user.first_name }}! {% else %} Welcome to the Chatapp {% endif %}
           </span>
           <!-- Add spacer, to align navigation to the right -->
           <div class="mdl-layout-spacer"></div>
@@ -31,41 +41,40 @@
             <a class="mdl-navigation__link" href="">Link</a>
             <a class="mdl-navigation__link" href="">Link</a> -->
             {% if request.user.is_authenticated %}
-            <form method="post" action="{% url 'logout' %}">
-              {% csrf_token %}
-              <button
-                type="submit"
-                class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent"
-              >
-                Logout
-              </button>
-            </form>
-            {% else %} 
-            
-            <form method="get" action="{% url 'register' %}">
-              <button
-                type="submit"
-                class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent"
-              >
-                Register
-              </button>
-            </form>
-            
-            
-            
-            {% endif %}
+    <form method="post" action="{% url 'logout' %}">
+        {% csrf_token %}
+        <button
+            type="submit"
+            class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent"
+        >
+            Logout
+        </button>
+    </form>
+{% elif request.path != '/register/' %}
+    <a href="{% url 'register' %}">
+        <button
+            type="submit"
+            class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent"
+        >
+            REGISTER
+        </button>
+    </a>
+{% else %}
+    <a href="{% url 'login' %}">
+        <button
+            type="submit"
+            class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent"
+        >
+            Login
+        </button>
+    </a>
+{% endif %}
+
           </nav>
         </div>
       </header>
-      <div class="mdl-layout__drawer">
-        <span class="mdl-layout-title">Chatroom</span>
-        <nav class="mdl-navigation">
-          <a class="mdl-navigation__link" href="">Link</a>
-          <a class="mdl-navigation__link" href="">Link</a>
-          <a class="mdl-navigation__link" href="">Link</a>
-          <a class="mdl-navigation__link" href="">Link</a>
-        </nav>
-      </div>
+      
+    
       <main class="mdl-layout__content">
         <div class="page-content">{% block content %} {% endblock %}</div>
       </main>
